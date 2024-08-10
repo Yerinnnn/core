@@ -2,8 +2,14 @@ package hello.core.member;
 
 public class MemberServiceImpl implements MemberService {
 
-    // 인터페이스 가져올 때는 구현체 선택 필수로 해줘야 함
-    private final MemberRepository memberRepository = new MemoryMemberRepository();
+    // 이제, DIP 완성 : DIP를 지키고 추상화에만 의존하도록 수정됨
+    // 관심사의 분리 : 객체를 생성하고 연결하는 역할과 실행하는 역할이 명확히 분리됨
+    // MemberRepository 인터페이스에만 의존함
+    private final MemberRepository memberRepository;
+
+    public MemberServiceImpl(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
+    }
 
     @Override
     public void join(Member member) {
