@@ -1,0 +1,26 @@
+# IntelliJ IDEA files
+.idea/
+*.iml
+
+# Built artifacts
+/build/
+/out/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Gradle files
+!gradlew
+!gradlew.bat
+!/gradle/wrapper/gradle-wrapper.jar
+!/gradle/wrapper/gradle-wrapper.properties
+
+# Log files
+*.log
+
+# Java class files
+*.class
+
+# Temporary files
+*.tmp
