@@ -1,20 +1,27 @@
 package hello.core;
 
+import hello.core.member.MemberRepository;
+import hello.core.member.MemoryMemberRepository;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
 
 @Configuration
 @ComponentScan(
-        // 탐색 시작 위치 설정 (여러 개 설정 가능)
-        // 지정하지 않으면 `@ComponentScan` 이 붙은 설정 정보 클래스의 패키지가 시작 위치가 됨
-        // 권장 : 패키지 위치를 지정하지 않고, 설정 정보 클래스의 위치를 프로젝트 최상단에 두는 것
-        // `com.hello` 프로젝트 시작 루트, 여기에 AppConfig 같은 메인 설정 정보를 두고,
-        // @ComponentScan 애노테이 션을 붙이고, `basePackages` 지정은 생략하면 됨
-        // 스프링 부트를 사용하면 스프링 부트의 대표 시작 정보인 `@SpringBootApplication` 를 이 프로젝트 시작 루트 위치에 두는 것이 관례
-        // (이 설정안에 `@ComponentScan` 이 들어있음 !)
         basePackages = "hello.core",
         excludeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = Configuration.class)
 )
 public class AutoAppConfig {
+    // 수동 빈 등록 vs 자동 빈 등록
+    // 이 경우 수동 빈 등록이 우선권을 가짐 (수동 빈이 자동 빈을 오버라이딩 함)
+    // 우린 우리가 만든 테스트로 돌려서, 자동으로 수동 빈이 우선권을 가진 것으로 실행 되었지만,
+    // 최근 스프링 부트에서는 수동 빈 등록과 자동 빈 등록이 충돌나면 오류가 발생하도록 기본 값이 바뀌었기 때문에,
+    // 스프링 부트로 돌리면 (CoreApplication에서 Run), 오류가 발생함
+    // 오버라이딩 하게 하고 싶으면 설정을 setting spring.main.allow-bean-definition-overriding=true 로 바꾸라는 메세지가 함께 출력됨
+    // 그 설정을 applictaion.properties에 복붙하면 됨
+    @Bean(name = "memoryMemberRepository")
+    public MemberRepository memberRepository() {
+        return new MemoryMemberRepository();
+    }
 }
