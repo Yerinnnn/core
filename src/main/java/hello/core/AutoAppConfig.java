@@ -5,13 +5,15 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
 
 @Configuration
-@ComponentScan(  // @Component 어노테이션이 붙은 클래스를 찾아서 자동으로 스프링 빈으로 등록해줌
-        // 제외할 클래스들의 필터를 만들어줌
-        // @Configuration 어노테이션 코드를 보면 @Component가 붙어있기 때문에, 자동 스캔의 대상이 됨
-        // AppConfig.class 같은 건 수동으로 등록하는 파일이기 때문에, 자동 스캔되면 충돌이 나서 제외해줌
-        // (일반적으로 Configuration 어노테이션이 붙은 클래스를 제외하지는 않음)
-        // (여기서는 예제 코드가 남아있기 떄문에 제외함)
-        // Configuration FilterType.ANNOTATION이 붙은 건 제외한다는 뜻
+@ComponentScan(
+        // 탐색 시작 위치 설정 (여러 개 설정 가능)
+        // 지정하지 않으면 `@ComponentScan` 이 붙은 설정 정보 클래스의 패키지가 시작 위치가 됨
+        // 권장 : 패키지 위치를 지정하지 않고, 설정 정보 클래스의 위치를 프로젝트 최상단에 두는 것
+        // `com.hello` 프로젝트 시작 루트, 여기에 AppConfig 같은 메인 설정 정보를 두고,
+        // @ComponentScan 애노테이 션을 붙이고, `basePackages` 지정은 생략하면 됨
+        // 스프링 부트를 사용하면 스프링 부트의 대표 시작 정보인 `@SpringBootApplication` 를 이 프로젝트 시작 루트 위치에 두는 것이 관례
+        // (이 설정안에 `@ComponentScan` 이 들어있음 !)
+        basePackages = "hello.core",
         excludeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = Configuration.class)
 )
 public class AutoAppConfig {
