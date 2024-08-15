@@ -15,6 +15,18 @@ public class AppConfig {
     // @Bean orderService -> new MemoryMemberRepository()
     // 싱글톤이 깨지는 것처럼 보임
 
+    // 호출 시 기대한 결과 (순서 무관, 횟수가 중요)
+    // call AppConfig.memberService
+    // call AppConfig.memberRepository
+    // call AppConfig.memberRepository
+    // call AppConfig.orderService
+    // call AppConfig.memberRepository
+
+    // 실제 결과 : 한 번씩만 호출됨
+    // call AppConfig.memberService
+    // call AppConfig.memberRepository
+    // call AppConfig.orderService
+
     @Bean
     public MemberService memberService() {
         System.out.println("call AppConfig.memberService");
