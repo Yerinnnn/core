@@ -1,16 +1,26 @@
 package hello.core.order;
 
 import hello.core.discount.DiscountPolicy;
+import hello.core.discount.FixDiscountPolicy;
+import hello.core.discount.RateDiscountPolicy;
 import hello.core.member.Member;
 import hello.core.member.MemberRepository;
-import lombok.RequiredArgsConstructor;
+import hello.core.member.MemoryMemberRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor  // lombok의 기능 : final 붙은 필수값을 가지고, 생성자를 자동으로 만들어줌 (cmd + F12로 확인 가능)
 public class OrderServiceImpl implements OrderService {
+    // FixDiscountPolicy` , `RateDiscountPolicy` 둘다 스프링 빈으로 선언 후 테스트 all run하면,
+    // AutoAppConfigTest의 basicScan()에서 available: expected single matching bean but found 2 발생
     private final MemberRepository memberRepository;
     private final DiscountPolicy discountPolicy;
+
+    @Autowired
+    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
+        this.memberRepository = memberRepository;
+        this.discountPolicy = discountPolicy;
+    }
 
     @Override
     public Order createOrder(Long memberId, String itemName, int itemPrice) {
