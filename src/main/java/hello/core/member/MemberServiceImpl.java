@@ -1,19 +1,23 @@
 package hello.core.member;
 
-public class MemberServiceImpl implements MemberService {
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-    // 이제, DIP 완성 : DIP를 지키고 추상화에만 의존하도록 수정됨
-    // 관심사의 분리 : 객체를 생성하고 연결하는 역할과 실행하는 역할이 명확히 분리됨
-    // MemberRepository 인터페이스에만 의존함
+@Component
+public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
 
+    // MemberServiceImpl을 생성하면서, 스프링이 스프링 컨테이너에 있는 MemberRepository를 뒤져봄(타입으로 조회함)
+    // 그래서, memoryMemberRepository를 찾아서 주입해줄 수 있음
+    // (memoryMemberRepository는 memberRepository의 자식이니까 타입이 맞기 때문에)
+    // 같은 타입이 여러개면 충돌 발생
+    @Autowired  // ac.getBean(MemberRepository.class)와 동일한 기능
     public MemberServiceImpl(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
     }
 
     @Override
     public void join(Member member) {
-        // 다형성에 의해서 MemberRepository 인터페이스가 아니라, MemoryMemberRepository에 있는 save()가 호출됨
         memberRepository.save(member);
     }
 
